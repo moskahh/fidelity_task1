@@ -1,7 +1,8 @@
 # Create your tests here.
+from django.http import HttpRequest
 from django.test import TestCase
 from .models import Employee,Car,Records
-
+from .EmployeeOperation import delete as Em_delete
 
 # Create your tests here.
 class ModelTest(TestCase):  # 创建ModelTest类，继承django.test.TestCase测试类。
@@ -28,10 +29,16 @@ class ModelTest(TestCase):  # 创建ModelTest类，继承django.test.TestCase测
         self.assertEqual(result.out_time, None)
 
     def test_delete_employee(self):
-        em = Employee.objects.get(sid=202316)
-        em.delete()
+        # request= HttpRequest
+        Em_delete(HttpRequest(),202316)
+        # em = Employee.objects.get(sid=202316)
+
+        # em.delete()
         em_ret = Employee.objects.filter(sid=202316)
         self.assertEqual(len(em_ret), 0)  #判断员工对应信息是否删除
+        car_ret =Car.objects.filter(user_id=202316)
+        self.assertEqual(len(car_ret), 0)  #判断员工对应的车辆信息是否删除
+
 
 
     def test_delete_car(self):
